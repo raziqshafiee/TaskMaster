@@ -47,7 +47,6 @@ dependencies {
         implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
         implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
         implementation("androidx.activity:activity-ktx:1.8.2")
-
         // JSON & DataStore
         implementation("com.google.code.gson:gson:2.10.1")
         implementation("androidx.datastore:datastore-preferences:1.0.0")
