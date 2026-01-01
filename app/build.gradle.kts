@@ -38,12 +38,18 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    implementation(libs.androidx.activity)
-    implementation(libs.androidx.constraintlayout)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    dependencies {
+        implementation("androidx.core:core-ktx:1.12.0")
+        implementation("androidx.appcompat:appcompat:1.6.1")
+        implementation("com.google.android.material:material:1.11.0")
+        implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+        implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+        implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
+        implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
+        implementation("androidx.activity:activity-ktx:1.8.2")
+
+        // JSON & DataStore
+        implementation("com.google.code.gson:gson:2.10.1")
+        implementation("androidx.datastore:datastore-preferences:1.0.0")
+    }
 }
