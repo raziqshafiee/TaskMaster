@@ -51,5 +51,37 @@ class TaskRepository(private val context: Context) : ITaskRepository {
         persist()
     }
 
-    override suspend fun backupTasksToDevice(): Boolean = false // Role C will fix this
+    override suspend fun backupTasksToDevice(): Boolean = withContext(Dispatchers.IO) {
+        try {
+            val jsonString = gson.toJson(_tasks.value)
+            val resolver = context.contentResolver
+            val contentValues = android.content.ContentValues().apply {
+                put(
+                    android.provider.MediaStore.MediaColumns.DISPLAY_NAME,
+                    "TaskMaster_Backup_${System.currentTimeMillis()}.json"
+                )
+                put(android.provider.MediaStore.MediaColumns.MIME_TYPE, "application/json")
+                put(
+                    android.provider.MediaStore.MediaColumns.RELATIVE_PATH,
+                    android.os.Environment.DIRECTORY_DOCUMENTS + "/TaskMaster"
+                )
+                put(android.provider.MediaStore.MediaColumns.IS_PENDING, 1)
+            }
+            val uri = resolver.insert(
+                android.provider.MediaStore.Files.getContentUri("external"),
+                contentValues
+            )
+            uri?.let {
+                resolver.openOutputStream(it)
+                    ?.use { stream -> stream.write(jsonString.toByteArray()) }
+                contentValues.clear()
+                contentValues.put(android.provider.MediaStore.MediaColumns.IS_PENDING, 0)
+                resolver.update(it, contentValues, null, null)
+                return@withContext true
+            }
+            return@withContext false
+        } catch (e: Exception) {
+            return@withContext false
+        }
+    }
 }

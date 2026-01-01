@@ -33,8 +33,11 @@ class SettingsActivity : AppCompatActivity() {
 
         // Placeholder for Role C's backup logic
         btnBackup.setOnClickListener {
-            // Role C will implement the logic here later
-            Toast.makeText(this, "Backup feature coming soon!", Toast.LENGTH_SHORT).show()
+            lifecycleScope.launch {
+                val success = app.taskRepository.backupTasksToDevice()
+                val msg = if (success) "Backup Saved to Documents!" else "Backup Failed"
+                Toast.makeText(this@SettingsActivity, msg, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }
